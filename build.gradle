@@ -14,7 +14,7 @@ ext {
     openZWaveConfigDir = project.openZWaveConfigDir
     zWaveControllerPort = project.zWaveControllerPort
 
-    javaHome = System.getenv("JAVA_HOME")
+    javaHome = System.properties["java.home"]
     nativeClasses = ["org.zwave4j.Manager", "org.zwave4j.Options"]
 
     additionalNativeLibsDir = "${projectDir}/native_libs"
@@ -54,9 +54,9 @@ libraries {
         baseName = "zwave4j"
         binaries.all {
             if (toolChain in Gcc) {
-                cppCompiler.args "-I", "${javaHome}/include"
-                cppCompiler.args "-I", "${javaHome}/include/win32"
-                cppCompiler.args "-I", "${javaHome}/include/linux"
+                cppCompiler.args "-I", "${javaHome}/../include"
+                cppCompiler.args "-I", "${javaHome}/../include/win32"
+                cppCompiler.args "-I", "${javaHome}/../include/linux"
                 cppCompiler.args "-I", "${openZWaveDir}/cpp/src"
                 cppCompiler.args "-I", "${openZWaveDir}/cpp/src/value_classes"
                 cppCompiler.args "-I", "${openZWaveDir}/cpp/src/command_classes"
