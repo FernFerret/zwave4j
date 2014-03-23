@@ -3,3 +3,4 @@
 **org_zwave4j_Manager.h
 **org_zwave4j_Options.h
 gradle.properties
+*.sw*

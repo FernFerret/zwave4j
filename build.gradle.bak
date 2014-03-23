@@ -35,8 +35,7 @@ ext {
     def architectureName = System.properties["os.arch"]
     if (architectureName.endsWith("86")) {
         architecture = "x86"
-    } else {
-        // Note apparently some systems return amd64, where others return x86_64
+    } else if (architectureName == "amd64") {
         architecture = "amd64"
     }
 }
@@ -46,10 +45,8 @@ repositories {
     mavenCentral()
 }
 
-model {
-    toolChains {
-        gcc(Gcc) {}
-    }
+toolChains {
+    gcc(Gcc) {}
 }
 
 libraries {
@@ -79,7 +76,7 @@ libraries {
                         args << "-m32"
                     }
                 }
-
+            
                 if (os == "windows") {
                     linker.args "-static"
                     toolChain.linker.withArguments { args ->
@@ -88,12 +85,12 @@ libraries {
                     if (architecture == "x86") {
                         linker.args "--kill-at"
                     }
-                }
-
+                } 
+                
                 toolChain.linker.withArguments { args ->
                     args << project.openZWaveLibFile
                 }
-
+                
                 tasks.withType(CppCompile) {
                     dependsOn generateNativeHeaders
                 }
@@ -105,7 +102,7 @@ libraries {
 task generateNativeHeaders(type: Exec, dependsOn: classes) {
     inputs.dir(sourceSets.main.output.classesDir)
     commandLine "javah"
-
+    
     afterEvaluate {
         outputs.dir(sources.main.cpp.exportedHeaders.srcDirs.iterator()[0])
         args "-d", sources.main.cpp.exportedHeaders.srcDirs.iterator()[0]
